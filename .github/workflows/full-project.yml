@@ -1,60 +1,60 @@
-# name: CI
+name: CI
 
-# on:
-#   push:
-#     branches: [main]
-#   pull_request:
-#     branches: [main]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
-# jobs:
-#   backend:
-#     name: Build Backend (Maven)
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: hospital-backend-main  # your backend folder
-#     steps:
-#       - uses: actions/checkout@v4
+jobs:
+  backend:
+    name: Build Backend (Maven)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: hospital-backend-main  # your backend folder
+    steps:
+      - uses: actions/checkout@v4
 
-#       - name: Setup Java
-#         uses: actions/setup-java@v4
-#         with:
-#           distribution: temurin
-#           java-version: '17'
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
-#       - name: Cache Maven repository
-#         uses: actions/cache@v4
-#         with:
-#           path: ~/.m2/repository
-#           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-#           restore-keys: |
-#             ${{ runner.os }}-m2-
+      - name: Cache Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
 
-#       - name: Build with Maven
-#         run: mvn -B -DskipTests clean package
+      - name: Build with Maven
+        run: mvn -B -DskipTests clean package
 
-#   frontend:
-#     name: Build Frontend (React)
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
+  frontend:
+    name: Build Frontend (React)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-#       - uses: actions/setup-node@v4
-#         with:
-#           node-version: '18'
-#           cache: 'npm'
-#           cache-dependency-path: hospital-frontend-main/package-lock.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: hospital-frontend-main/package-lock.json
 
-#       - name: Install dependencies
-#         working-directory: hospital-frontend-main
-#         run: npm ci
+      - name: Install dependencies
+        working-directory: hospital-frontend-main
+        run: npm ci
 
-#       - name: Build React app
-#         working-directory: hospital-frontend-main
-#         run: npm run build
+      - name: Build React app
+        working-directory: hospital-frontend-main
+        run: npm run build
 
-#       - name: Deploy to GitHub Pages
-#         working-directory: hospital-frontend-main
-#         run: npm run deploy
-#         env:
-#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy to GitHub Pages
+        working-directory: hospital-frontend-main
+        run: npm run deploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
