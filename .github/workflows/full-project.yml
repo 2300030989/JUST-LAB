@@ -39,23 +39,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: package-lock.json
-      working-directory: hospital-frontend-main
+          cache-dependency-path: hospital-frontend-main/package-lock.json
 
       - name: Install dependencies
-        working-directory: hospital-frontend-main
         run: npm ci
+        working-directory: hospital-frontend-main
 
       - name: Build React app
-        working-directory: hospital-frontend-main
         run: npm run build
+        working-directory: hospital-frontend-main
 
       - name: Deploy to GitHub Pages
-        working-directory: hospital-frontend-main
         run: npm run deploy
+        working-directory: hospital-frontend-main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
