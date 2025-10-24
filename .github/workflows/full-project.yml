@@ -1,4 +1,4 @@
-name: CI
+name: Full Project CI/CD
 
 on:
   push:
@@ -14,7 +14,8 @@ jobs:
       run:
         working-directory: hospital-backend-main
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -33,29 +34,33 @@ jobs:
       - name: Build with Maven
         run: mvn -B -DskipTests clean package
 
+      - name: Run backend tests
+        run: mvn test
+
   frontend:
-    name: Build Frontend (React)
+    name: Build & Deploy Frontend (React/Vite)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: hospital-frontend-main
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20.19.0'
           cache: 'npm'
-          cache-dependency-path: hospital-frontend-main/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        working-directory: hospital-frontend-main
 
       - name: Build React app
         run: npm run build
-        working-directory: hospital-frontend-main
 
       - name: Deploy to GitHub Pages
         run: npm run deploy
-        working-directory: hospital-frontend-main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
