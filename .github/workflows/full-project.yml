@@ -62,8 +62,8 @@ jobs:
 
       - name: Configure Git user
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+           git config user.name "2300030989"
+           git config user.email "2300030989@users.noreply.github.com"
 
       - name: Deploy to GitHub Pages
         run: npm run deploy
